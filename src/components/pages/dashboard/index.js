@@ -6,7 +6,8 @@ import {
 } from 'native-base';
 
 import AppBar from '../../shared/app-bar';
-import { ML_10 } from '../../../util/styles';
+import { ML_10, FLEX_1, HORIZONTALLY_CENTER, MT_20 } from '../../../util/styles';
+import * as Styles from './styles';
 
 class DashboardComponent extends React.Component {
   static navigationOptions = {
@@ -21,10 +22,16 @@ class DashboardComponent extends React.Component {
   };
 
   render() {
+    const { user } = this.props;
+
     return (
-      <View>
+      <View style={FLEX_1}>
         <AppBar />
-        <Text style={ML_10}>{JSON.stringify(this.props.user, null, 4)} </Text>
+        <View style={[HORIZONTALLY_CENTER, MT_20]}>
+          <Text style={[ML_10, Styles.WELCOME_TEXT]}>
+            Hello {user.username}, this is your Dashboard.
+          </Text>
+        </View>
       </View>
     );
   }

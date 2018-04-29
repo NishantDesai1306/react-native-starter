@@ -64,10 +64,9 @@ This will start the process of "ejecting" from Create React Native App's build s
 **Warning:** Running eject is a permanent action (aside from whatever version control system you use). An ejected app will require you to have an [Xcode and/or Android Studio environment](https://facebook.github.io/react-native/docs/getting-started.html) set up.
 
 ## Screenshots
-<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/login.png" width="100">
-![ ](https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/register.png =100x)
-![ ](https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/dashboard.png =100x)
-![ ](https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/sidebar.png =100x)
-![ ](https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/settings.png =100x)
-![ ](https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/account.png =100x)
-
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/login.png" width="200">
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/register.png" width="200">
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/dashboard.png" width="200">
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/sidebar.png" width="200">
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/settings.png" width="200">
+<img src="https://github.com/NishantDesai1306/react-native-starter/blob/master/photos/account.png" width="200">

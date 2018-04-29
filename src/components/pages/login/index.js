@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { withNavigation, NavigationActions } from 'react-navigation';
 import { Field, reduxForm } from 'redux-form';
 import { 
@@ -21,8 +21,8 @@ import {
   MT_20,
   FLEX_3,
   EMPTY,
-  DISABLED_TEXT,
-  CENTER
+  CENTER,
+  FLEX_4
 } from '../../../util/styles';
 import { REDUX_FORM_KEYS } from '../../../services/constant.service';
 import { login } from '../../../services/auth.service';
@@ -124,8 +124,8 @@ class LoginComponent extends React.Component {
     return (
       <View style={Styles.container}>
         <View style={FLEX_1} />
-        <View style={FLEX_3}>
-          <Grid style={Styles.titleGrid}>
+        <View style={FLEX_4}>
+          <Grid style={[Styles.titleGrid]}>
             <Col 
               size={40} 
               style={Styles.titleIcon} 
@@ -137,47 +137,47 @@ class LoginComponent extends React.Component {
             </Col>
           </Grid>
 
-          <View style={MT_20}>
-            <Field 
-              name='email'
-              keyboardType='email-address'
-              label='Email'
-              type='text'
-              component={this.renderInput}
-            />
-            <Field
-              name='password'
-              label='Password'
-              type='password'
-              component={this.renderInput} 
-            />
-          </View>
-
-          <View style={Styles.buttonGroupContainer}>
-            <View style={Styles.buttonContainer}>
-              <Button 
-                style={[submitButtonStyle.container]} 
-                disabled={disableSubmitButton} 
-                onPress={this.login}
-              >
-                <View style={HORIZONTALLY_CENTER}>
-                  <Text style={submitButtonStyle.text}>Login</Text>
-                </View>
-              </Button>
+          <ScrollView>
+            <View style={MT_20}>
+              <Field 
+                name='email'
+                keyboardType='email-address'
+                label='Email'
+                type='text'
+                component={this.renderInput}
+              />
+              <Field
+                name='password'
+                label='Password'
+                type='password'
+                component={this.renderInput} 
+              />
             </View>
-            <View style={[Styles.buttonContainer, MT_20]}>
-              <Button 
-                style={Styles.submitButton} 
-                onPress={() => { this.props.navigation.navigate('Registration'); }}
-              >
-                <View style={HORIZONTALLY_CENTER}>
-                  <Text style={Styles.submitButtonText}>Register</Text>
-                </View>
-              </Button>
+            <View style={Styles.buttonGroupContainer}>
+              <View style={Styles.buttonContainer}>
+                <Button 
+                  style={[submitButtonStyle.container]} 
+                  disabled={disableSubmitButton} 
+                  onPress={this.login}
+                >
+                  <View style={HORIZONTALLY_CENTER}>
+                    <Text style={submitButtonStyle.text}>Login</Text>
+                  </View>
+                </Button>
+              </View>
+              <View style={[Styles.buttonContainer, MT_20]}>
+                <Button 
+                  style={Styles.submitButton} 
+                  onPress={() => { this.props.navigation.navigate('Registration'); }}
+                >
+                  <View style={HORIZONTALLY_CENTER}>
+                    <Text style={Styles.submitButtonText}>Register</Text>
+                  </View>
+                </Button>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
-        <View style={FLEX_1} />
       </View>
     );
   }

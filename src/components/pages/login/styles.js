@@ -8,7 +8,8 @@ export default {
         alignItems: 'center'
     },
     titleGrid: {
-        maxHeight: 65
+        maxHeight: 65,
+        minHeight: 50
     },
     titleIcon: { 
         alignItems: 'flex-end', 
@@ -34,8 +35,8 @@ export default {
         color: THEME.TEXT_LIGHT
     },
     buttonGroupContainer: {
-        marginTop: 15,
-        height: 100,
+        marginVertical: 15,
+        minHeight: 100,
         alignItems: 'center'
     },
     buttonContainer: {

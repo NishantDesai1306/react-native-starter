@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { Spinner, View } from 'native-base';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -20,6 +21,10 @@ export default class AppComponent extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={loader} persistor={persistor}>
+          <StatusBar
+            backgroundColor={THEME.PRIMARY}
+            barStyle="light-content"
+          />
           <AppRoutes /> 
         </PersistGate>
       </Provider>

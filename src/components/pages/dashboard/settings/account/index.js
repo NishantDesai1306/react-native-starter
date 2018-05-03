@@ -12,7 +12,8 @@ import { Field, reduxForm } from 'redux-form';
 import ImagePicker from 'react-native-image-picker';
 import {
     Button,
-    Text
+    Text,
+    Icon
 } from 'native-base';
 
 import Styles from './styles';
@@ -21,7 +22,9 @@ import {
     FLEX_1,
     EMPTY,
     FLEX_5,
-    MT_20
+    MT_20,
+    MT_10,
+    CENTER
 } from '../../../../../util/styles';
 import AppBar from '../../../../shared/app-bar';
 import { REDUX_FORM_KEYS, SERVER_URL } from '../../../../../services/constant.service';
@@ -39,9 +42,17 @@ class AccountDetailsComponent extends React.Component {
 
         this.showImagePicker = this.showImagePicker.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
-    }
+    }    
 
     showImagePicker() {
+        if (this.props.network && !this.props.network.isConnected) {
+            ToastAndroid.show(
+                'To change profile picture you device should be connected to internet',
+                ToastAndroid.LONG
+            );
+            return;
+        }
+
         ImagePicker.showImagePicker({}, (response) => {
             if (response.didCancel) {
                 return;
@@ -75,8 +86,9 @@ class AccountDetailsComponent extends React.Component {
     }
 
     render() {
-        const { submitting, valid } = this.props;
-        const disableSubmitButton = submitting || !valid;
+        const { submitting, valid, network } = this.props;
+        const isDeviceOffline = network && !network.isConnected;
+        const disableSubmitButton = isDeviceOffline || submitting || !valid;
         const submitButtonStyle = {
             container: Object.assign({},
                 Styles.submitButton,
@@ -94,7 +106,22 @@ class AccountDetailsComponent extends React.Component {
             <View style={FLEX_1}>
                 <AppBar goBack title={'Account Details'} />
                 <View style={Styles.container}>
-                    <View style={FLEX_1} /> 
+                    <View style={[FLEX_1, CENTER]}> 
+                        {
+                            isDeviceOffline && (
+                                <View style={Styles.errorTextContainer}>
+                                    <Icon 
+                                        type='MaterialIcons'
+                                        name='error' 
+                                        style={Styles.errorTextIcon} 
+                                    />
+                                    <Text style={Styles.errorText}>
+                                        To change your account details this device should be connected to internet.
+                                    </Text>
+                                </View>
+                            )
+                        }
+                    </View>
                     <View style={FLEX_5}>
                         <ScrollView>
                             <View>
@@ -153,6 +180,7 @@ class AccountDetailsComponent extends React.Component {
                                     </Button>
                                 </View>
                             </View> 
+
                         </ScrollView>
                     </View>
                 </View>
@@ -207,10 +235,11 @@ const accountDetailsForm = reduxForm({
 
 const accountDetailsWithNav = withNavigation(accountDetailsForm);
 
-function mapStateToProps({ form, user }) {
+function mapStateToProps({ form, user, network }) {
     return {
         accountDetails: form && form[REDUX_FORM_KEYS.ACCOUNT_DETAILS],
-        initialValues: user
+        initialValues: user,
+        network
     };
 }
 const connectedAccountDetailsForm = connect(mapStateToProps, null)(accountDetailsWithNav);

@@ -19,7 +19,9 @@ import {
   FLEX_1, 
   MT_10, 
   FLEX_4,
-  EMPTY
+  EMPTY,
+  FLEX_5,
+  CENTER
 } from '../../../../../util/styles';
 import { updatePassword } from '../../../../../services/user.service';
 import { REDUX_FORM_KEYS } from '../../../../../services/constant.service';
@@ -50,8 +52,9 @@ class ChangePasswordComponent extends React.Component {
     }
 
     render() {
-        const { pristine, submitting, valid } = this.props;
-        const disableSubmitButton = pristine || submitting || !valid;
+        const { pristine, submitting, valid, network } = this.props;
+        const isDeviceOffline = network && !network.isConnected;
+        const disableSubmitButton = isDeviceOffline || pristine || submitting || !valid;
         const submitButtonStyle = {
             container: Object.assign(
                 {}, 
@@ -69,8 +72,23 @@ class ChangePasswordComponent extends React.Component {
             <View style={FLEX_1}>
                 <AppBar goBack title='Change Password' />
                 <View style={Styles.container}>
-                    <View style={FLEX_1} />
-                    <View style={FLEX_4}>
+                    <View style={[FLEX_1, CENTER]}> 
+                        {
+                            isDeviceOffline && (
+                                <View style={Styles.errorTextContainer}>
+                                    <Icon 
+                                        type='MaterialIcons'
+                                        name='error' 
+                                        style={Styles.errorTextIcon} 
+                                    />
+                                    <Text style={Styles.errorText}>
+                                        To change your password this device should be connected to internet.
+                                    </Text>
+                                </View>
+                            )
+                        }
+                    </View>
+                    <View style={FLEX_5}>
                         <Grid style={Styles.titleGrid}>
                             <Col 
                                 size={10} 
@@ -213,9 +231,10 @@ const reduxRegistrationForm = reduxForm({
 
 const registrationFormWithNav = withNavigation(reduxRegistrationForm);
 
-function mapStateToProps({ form }) {
+function mapStateToProps({ form, network }) {
     return {
-        changePasswordDetails: form && form[REDUX_FORM_KEYS.CHANGE_PASSWORD]
+        changePasswordDetails: form && form[REDUX_FORM_KEYS.CHANGE_PASSWORD],
+        network
     };
 }
 const connectedRegistrationForm = connect(mapStateToProps, null)(registrationFormWithNav);

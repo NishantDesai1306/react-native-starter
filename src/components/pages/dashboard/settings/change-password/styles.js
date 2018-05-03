@@ -54,5 +54,19 @@ export default {
     },
     submitButtonText: {
         color: THEME.TEXT_LIGHT
+    },
+    errorTextContainer: {
+        padding: 20,
+        flexDirection: 'row',
+        alignSelf: 'flex-start'
+    },
+    errorTextIcon: {
+        color: THEME.ERROR_TEXT,
+        fontSize: 20,
+        paddingRight: 5
+    },
+    errorText: {
+        color: THEME.ERROR_TEXT,
+        fontWeight: '800'
     }
 };

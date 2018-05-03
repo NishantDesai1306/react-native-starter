@@ -46,5 +46,19 @@ export default {
         borderColor: THEME.PRIMARY,
         borderWidth: 5,
         borderRadius: 75
+    },
+    errorTextContainer: {
+        padding: 20,
+        flexDirection: 'row',
+        alignSelf: 'flex-start'
+    },
+    errorTextIcon: {
+        color: THEME.ERROR_TEXT,
+        fontSize: 20,
+        paddingRight: 5
+    },
+    errorText: {
+        color: THEME.ERROR_TEXT,
+        fontWeight: '800'
     }
 };

@@ -25,13 +25,13 @@ import { updatePassword } from '../../../../../services/user.service';
 import { REDUX_FORM_KEYS } from '../../../../../services/constant.service';
 import { THEME } from '../../../../../theme';
 import AppBar from '../../../../shared/app-bar';
+import renderInput from '../../../../shared/input';
 
 class ChangePasswordComponent extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.renderInput = this.renderInput.bind(this);
         this.changePassword = this.changePassword.bind(this);
     }
 
@@ -47,31 +47,6 @@ class ChangePasswordComponent extends React.Component {
             ToastAndroid.show(err.message, ToastAndroid.SHORT);
             console.log('error', err);
         });
-    }
-
-    renderInput({ input, label, meta: { error } }) {
-        let hasError = false;
-        
-        if (error !== undefined) {
-            hasError = true;
-        }
-
-        return ( 
-            <View style={label === 'Old Password' ? {} : MT_10}>
-                <Item error={hasError} style={Styles.field}>
-                    <Text style={Styles.fieldText}>{label}</Text>
-                    <Input {...input} style={[Styles.fieldInput]} />
-                </Item>
-                {
-                    hasError ? (
-                        <View style={FLEX_1}>
-                        <Text style={Styles.fieldErrorText}>{error}</Text>
-                        </View> 
-                    ) : 
-                    null
-                }
-            </View>
-        );
     }
 
     render() {
@@ -114,19 +89,41 @@ class ChangePasswordComponent extends React.Component {
                                     name='oldPassword'
                                     label='Old Password'
                                     type='password'
-                                    component={this.renderInput} 
+                                    component={renderInput} 
+                                    styles={{
+                                        field: Styles.field,
+                                        fieldInput: Styles.fieldInput,
+                                        fieldText: Styles.fieldText,
+                                        fieldErrorText: Styles.fieldErrorText,
+                                        spinnerColor: THEME.PRIMARY
+                                    }}
+                                    isFirst
                                 />
                                 <Field
                                     name='newPassword'
                                     label='New Password'
                                     type='password'
-                                    component={this.renderInput} 
+                                    component={renderInput} 
+                                    styles={{
+                                        field: Styles.field,
+                                        fieldInput: Styles.fieldInput,
+                                        fieldText: Styles.fieldText,
+                                        fieldErrorText: Styles.fieldErrorText,
+                                        spinnerColor: THEME.PRIMARY
+                                    }}
                                 />
                                 <Field
                                     name='confirmPassword'
                                     label='Confirm Password'
                                     type='password'
-                                    component={this.renderInput} 
+                                    component={renderInput} 
+                                    styles={{
+                                        field: Styles.field,
+                                        fieldInput: Styles.fieldInput,
+                                        fieldText: Styles.fieldText,
+                                        fieldErrorText: Styles.fieldErrorText,
+                                        spinnerColor: THEME.PRIMARY
+                                    }}
                                 />
                             </View>
 

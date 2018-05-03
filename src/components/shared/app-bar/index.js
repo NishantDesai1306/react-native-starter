@@ -45,13 +45,13 @@ class AppBarComponent extends React.Component {
 
     render() {
         const backButton = (
-            <Button transparent onPress={this.goBack} style={Styles.button}>
+            <Button transparent onPress={this.goBack}>
                 <Icon style={{ color: THEME.TEXT_LIGHT }} name='arrow-back' />
             </Button>
         );
 
         const menuButton = (
-            <Button transparent onPress={this.openDrawer} style={Styles.button}>
+            <Button transparent onPress={this.openDrawer}>
                 <Icon style={{ color: THEME.TEXT_LIGHT }} name='menu' />
             </Button>
         );

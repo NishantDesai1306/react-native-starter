@@ -12,17 +12,13 @@ import { Field, reduxForm } from 'redux-form';
 import ImagePicker from 'react-native-image-picker';
 import {
     Button,
-    Text,
-    Item,
-    Input,
+    Text
 } from 'native-base';
 
 import Styles from './styles';
 import {
     HORIZONTALLY_CENTER,
     FLEX_1,
-    MT_10,
-    DISABLED_TEXT,
     EMPTY,
     FLEX_5,
     MT_20
@@ -31,6 +27,7 @@ import AppBar from '../../../../shared/app-bar';
 import { REDUX_FORM_KEYS, SERVER_URL } from '../../../../../services/constant.service';
 import { THEME } from '../../../../../theme';
 import { updateProfilePicture, updateUserDetails } from '../../../../../services/user.service';
+import renderInput from '../../../../shared/input';
 
 class AccountDetailsComponent extends React.Component {
     constructor(props) {
@@ -40,7 +37,6 @@ class AccountDetailsComponent extends React.Component {
             imageSrc: `${SERVER_URL}/${props.initialValues.profilePictureUrl}`
         };
 
-        this.renderInput = this.renderInput.bind(this);
         this.showImagePicker = this.showImagePicker.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
     }
@@ -76,31 +72,6 @@ class AccountDetailsComponent extends React.Component {
             .catch((err) => {
                 console.log('error', err);
             });
-    }
-
-    renderInput({ input, label, meta: { error } }) {
-        let hasError = false;
-
-        if (error !== undefined) {
-            hasError = true;
-        }
-
-        return ( 
-            <View style={label === 'Username' ? {} : MT_10}>
-                <Item error={hasError} style={[Styles.field, { borderBottomColor: THEME.PRIMARY }]}>
-                    <Text style={Styles.fieldText}> { label } </Text>
-                    <Input {...input} style={Styles.fieldInput} /> 
-                </Item> 
-                {
-                    hasError ? ( 
-                        <View style={FLEX_1}>
-                            <Text style={Styles.fieldErrorText}> { error } </Text> 
-                        </View> 
-                    ) :
-                    null
-                } 
-            </View>
-        );
     }
 
     render() {
@@ -139,14 +110,29 @@ class AccountDetailsComponent extends React.Component {
                                     name='username'
                                     label='Username'
                                     type='text'
-                                    component={this.renderInput}
+                                    component={renderInput}
+                                    styles={{
+                                        field: Styles.field,
+                                        fieldInput: Styles.fieldInput,
+                                        fieldText: Styles.fieldText,
+                                        fieldErrorText: Styles.fieldErrorText,
+                                        spinnerColor: THEME.PRIMARY
+                                    }}
+                                    isFirst
                                 /> 
                                 <Field
                                     name='email'
                                     label='Email'
                                     keyboardType='email-address'
                                     type='text'
-                                    component={this.renderInput} 
+                                    component={renderInput} 
+                                    styles={{
+                                        field: Styles.field,
+                                        fieldInput: Styles.fieldInput,
+                                        fieldText: Styles.fieldText,
+                                        fieldErrorText: Styles.fieldErrorText,
+                                        spinnerColor: THEME.PRIMARY
+                                    }}
                                 /> 
                             </View>
 
@@ -194,7 +180,7 @@ const validate = (values, { accountDetails }) => {
     }
 
     if (email.length < 8 && email !== '') {
-        error.email = 'too short';
+        error.email = 'email is invalid';
     }
     if (!email.includes('@') && email !== '') {
         error.email = '@ not included';
@@ -207,6 +193,8 @@ const validate = (values, { accountDetails }) => {
         accountDetails.fields.username
     ) {
         error.username = 'username cannot be empty';
+    } else if (username.length < 5) {
+        error.username = 'username should have at least 5 characters';
     }
 
     return error;

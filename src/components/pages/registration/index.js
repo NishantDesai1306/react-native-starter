@@ -1,75 +1,64 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import { View, ScrollView, ToastAndroid } from 'react-native';
+import { withNavigation, NavigationActions } from 'react-navigation';
 import { Field, reduxForm } from 'redux-form';
 import { 
   Button,
   Text,
   Icon,
   Grid,
-  Col,
-  Item,
-  Input
+  Col
 } from 'native-base';
 
 import Styles from './styles';
 import {  
   HORIZONTALLY_CENTER, 
   FLEX_1, 
-  MT_10, 
   FLEX_4, 
-  DISABLED_TEXT, 
   EMPTY
 } from '../../../util/styles';
 import { register } from '../../../services/auth.service';
 import { REDUX_FORM_KEYS } from '../../../services/constant.service';
 import { THEME } from '../../../theme';
+import renderInput from '../../shared/input';
 
 class RegistrationComponent extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.renderInput = this.renderInput.bind(this);
     this.register = this.register.bind(this);
+    this.navigateToDashboard = this.navigateToDashboard.bind(this);
+  }
+
+  navigateToDashboard() {
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Dashboard' })
+      ]
+    });
+    
+    this.props.navigation.dispatch(resetAction);
   }
 
   register() {
     const { registrationDetails } = this.props;
 
     register(registrationDetails.values)
-    .then((data) => {
-      console.log('data', data);
+    .then(({ reason }) => {
+      if (reason) {
+        const text = reason.message || reason;
+        ToastAndroid.show(text, ToastAndroid.SHORT);
+      } else {
+        this.navigateToDashboard();
+      }
     })
     .catch((err) => {
-      console.log('error', err);
+      const text = err.message || err;
+      ToastAndroid.show(text, ToastAndroid.SHORT);
     });
-  }
-
-  renderInput({ input, label, meta: { error } }) {
-    let hasError = false;
-    
-    if (error !== undefined) {
-      hasError = true;
-    }
-
-    return ( 
-      <View style={label === 'Username' ? {} : MT_10}>
-        <Item error={hasError} style={Styles.field}>
-          <Text style={Styles.fieldText}>{label}</Text>
-          <Input {...input} style={Styles.fieldInput} />
-        </Item>
-        {
-          hasError ? (
-            <View style={FLEX_1}>
-              <Text style={Styles.fieldErrorText}>{error}</Text>
-            </View> 
-          ) : 
-          null
-        }
-      </View>
-    );
   }
 
   render() {
@@ -108,26 +97,51 @@ class RegistrationComponent extends React.Component {
                 name='username'
                 label='Username'
                 type='text'
-                component={this.renderInput}
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                isFirst
+                component={renderInput}
               />
               <Field 
                 name='email'
                 label='Email'
                 keyboardType='email-address'
                 type='text'
-                component={this.renderInput}
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                component={renderInput}
               />
               <Field
                 name='password'
                 label='Password'
                 type='password'
-                component={this.renderInput} 
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                component={renderInput} 
               />
               <Field
                 name='confirmPassword'
                 label='Confirm Password'
                 type='password'
-                component={this.renderInput} 
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                component={renderInput} 
               />
             </View>
 
@@ -183,7 +197,7 @@ const validate = (values, { registrationDetails }) => {
   }
 
   if (email.length < 8 && email !== '') {
-    error.email = 'too short';
+    error.email = 'email is invalid';
   }
   if (!email.includes('@') && email !== '') {
     error.email = '@ not included';
@@ -197,6 +211,8 @@ const validate = (values, { registrationDetails }) => {
     registrationDetails.fields.username
   ) {
     error.username = 'username cannot be empty';
+  } else if (username.length < 5) {
+    error.username = 'username should have at least 5 character';    
   }
 
   if (

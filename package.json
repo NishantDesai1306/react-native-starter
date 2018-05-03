@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^6.3.1",
+    "material-colors": "^1.2.5",
     "native-base": "^2.4.1",
     "promise": "^8.0.1",
     "react": "16.3.0-alpha.1",

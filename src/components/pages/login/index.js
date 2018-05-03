@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, ToastAndroid } from 'react-native';
 import { withNavigation, NavigationActions } from 'react-navigation';
 import { Field, reduxForm } from 'redux-form';
 import { 
@@ -9,8 +9,6 @@ import {
   Icon,
   Grid,
   Col,
-  Item,
-  Input,
   Spinner
 } from 'native-base';
 
@@ -19,7 +17,6 @@ import {
   HORIZONTALLY_CENTER,
   FLEX_1,
   MT_20,
-  FLEX_3,
   EMPTY,
   CENTER,
   FLEX_4
@@ -28,6 +25,7 @@ import { REDUX_FORM_KEYS } from '../../../services/constant.service';
 import { login } from '../../../services/auth.service';
 import { getUserDetails } from '../../../services/user.service';
 import { THEME } from '../../../theme';
+import renderInput from '../../shared/input';
 
 class LoginComponent extends React.Component {
 
@@ -38,7 +36,6 @@ class LoginComponent extends React.Component {
       validatingToken: true
     };
 
-    this.renderInput = this.renderInput.bind(this);
     this.login = this.login.bind(this);
     this.navigateToDashboard = this.navigateToDashboard.bind(this);
   }
@@ -72,30 +69,19 @@ class LoginComponent extends React.Component {
     const { loginDetails } = this.props;
 
     login(loginDetails.values)
-    .then(() => {
-      this.navigateToDashboard();
+    .then(({ reason }) => {
+      if (reason) {
+        const text = reason.message || reason;
+        ToastAndroid.show(text, ToastAndroid.SHORT);
+      } else {
+        this.navigateToDashboard();
+      }
     })
     .catch((err) => {
-      console.log('error', err);
+      const text = err.message || err;
+      console.log(text);
+      ToastAndroid.show('Invalid Username or Password', ToastAndroid.SHORT);
     });
-  }
-
-  renderInput({ input, label, meta: { error } }) {
-    let hasError = false;
-    
-    if (error !== undefined) {
-      hasError = true;
-    }
-
-    return ( 
-      <View>
-        <Item error={hasError} style={Styles.field}>
-          <Text style={Styles.fieldText}>{label}</Text>
-          <Input {...input} style={Styles.fieldInput} />
-        </Item>
-        {hasError ? <Text style={Styles.fieldErrorText}>{error}</Text> : <Text />}
-      </View>
-    );
   }
 
   render() {
@@ -144,13 +130,26 @@ class LoginComponent extends React.Component {
                 keyboardType='email-address'
                 label='Email'
                 type='text'
-                component={this.renderInput}
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                isFirst
+                component={renderInput}
               />
               <Field
                 name='password'
                 label='Password'
                 type='password'
-                component={this.renderInput} 
+                styles={{
+                  field: Styles.field,
+                  fieldInput: Styles.fieldInput,
+                  fieldText: Styles.fieldText,
+                  fieldErrorText: Styles.fieldErrorText
+                }}
+                component={renderInput} 
               />
             </View>
             <View style={Styles.buttonGroupContainer}>
@@ -202,7 +201,7 @@ const validate = (values, { loginDetails }) => {
   }
 
   if (email.length < 8 && email !== '') {
-    error.email = 'too short';
+    error.email = 'email is invalid';
   }
   if (!email.includes('@') && email !== '') {
     error.email = '@ not included';

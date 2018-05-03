@@ -29,18 +29,25 @@ class RegistrationComponent extends React.Component {
     super(props);
 
     this.register = this.register.bind(this);
-    this.navigateToDashboard = this.navigateToDashboard.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
-  navigateToDashboard() {
+  navigateTo(routeName) {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Dashboard' })
+        NavigationActions.navigate({ routeName })
       ]
     });
     
     this.props.navigation.dispatch(resetAction);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { network } = newProps;
+    if (network && !network.isConnected) {
+      return this.navigateTo('Offline');
+    }
   }
 
   register() {
@@ -52,7 +59,7 @@ class RegistrationComponent extends React.Component {
         const text = reason.message || reason;
         ToastAndroid.show(text, ToastAndroid.SHORT);
       } else {
-        this.navigateToDashboard();
+        this.navigateTo();
       }
     })
     .catch((err) => {
@@ -249,9 +256,10 @@ const reduxRegistrationForm = reduxForm({
 
 const registrationFormWithNav = withNavigation(reduxRegistrationForm);
 
-function mapStateToProps({ form }) {
+function mapStateToProps({ form, network }) {
   return {
-    registrationDetails: form && form[REDUX_FORM_KEYS.REGISTRATION]
+    registrationDetails: form && form[REDUX_FORM_KEYS.REGISTRATION],
+    network
   };
 }
 const connectedRegistrationForm = connect(mapStateToProps, null)(registrationFormWithNav);

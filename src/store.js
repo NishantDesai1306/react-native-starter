@@ -9,7 +9,7 @@ const persistConfig = {
     key: 'root',
     storage,
     debug: true,
-    blacklist: ['form', 'navigation'],
+    blacklist: ['form', 'navigation', 'network'],
     stateReconciler: hardSet
 };
 

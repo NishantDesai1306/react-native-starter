@@ -37,14 +37,14 @@ class LoginComponent extends React.Component {
     };
 
     this.login = this.login.bind(this);
-    this.navigateToDashboard = this.navigateToDashboard.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
   componentWillMount() {
     getUserDetails()
     .then((data) => {
       if (data) {
-        this.navigateToDashboard();
+        this.navigateTo('Dashboard');
       }
     })
     .catch(() => {
@@ -54,11 +54,18 @@ class LoginComponent extends React.Component {
     });
   }
 
-  navigateToDashboard() {
+  componentWillReceiveProps(newProps) {
+    const { network } = newProps;
+    if (network && !network.isConnected) {
+      return this.navigateTo('Offline');
+    }
+  }
+
+  navigateTo(routeName) {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Dashboard' })
+        NavigationActions.navigate({ routeName })
       ]
     });
     
@@ -74,7 +81,7 @@ class LoginComponent extends React.Component {
         const text = reason.message || reason;
         ToastAndroid.show(text, ToastAndroid.SHORT);
       } else {
-        this.navigateToDashboard();
+        this.navigateTo('Dashboard');
       }
     })
     .catch((err) => {
@@ -227,9 +234,10 @@ const reduxLoginForm = reduxForm({
 
 const loginFormWithNav = withNavigation(reduxLoginForm);
 
-function mapStateToProps({ form }) {
+function mapStateToProps({ form, network }) {
   return {
-    loginDetails: form && form[REDUX_FORM_KEYS.LOGIN]
+    loginDetails: form && form[REDUX_FORM_KEYS.LOGIN],
+    network
   };
 }
 const connectedLoginForm = connect(mapStateToProps, null)(loginFormWithNav);

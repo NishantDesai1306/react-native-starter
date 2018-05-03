@@ -11,7 +11,6 @@ const {
 const userReducer = (state = {}, action) => {
     switch (action.type) {
         case USER_LOGGED_IN:
-            console.log('logged in', action);
             return Object.assign({}, state, action.payload);
         case USER_UPDATED:
             return Object.assign({}, state, action.payload);

@@ -59,7 +59,7 @@ class AppBarComponent extends React.Component {
         const { goBack } = this.props;
         
         return (
-            <Header>
+            <Header androidStatusBarColor={THEME.PRIMARY}>
                 <View style={Styles.container}>
                     <View>
                         { goBack ? backButton : menuButton }

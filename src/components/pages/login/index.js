@@ -86,7 +86,6 @@ class LoginComponent extends React.Component {
     })
     .catch((err) => {
       const text = err.message || err;
-      console.log(text);
       ToastAndroid.show('Invalid Username or Password', ToastAndroid.SHORT);
     });
   }
